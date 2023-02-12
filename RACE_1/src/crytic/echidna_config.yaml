@@ -1,0 +1,5 @@
+testMode: assertion
+# You should ALWAYS set corpusDir to track coverage
+corpusDir: 'src/crytic/corpus'
+testLimit: 50000 
+multi-abi: true
