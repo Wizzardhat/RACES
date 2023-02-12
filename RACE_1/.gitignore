@@ -1,0 +1,24 @@
+# Ganache for Etheno -> Echidna tests
+node_modules
+package-lock.json
+
+# Compiler files
+cache/
+out/
+
+# Ignores development broadcast logs
+!/broadcast
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# Dotenv file
+.env
+
+# slither
+.vscode
+
+# echidna
+crytic-export
+corpus
+coverage
+covered.*
