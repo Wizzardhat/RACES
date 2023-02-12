@@ -2,11 +2,13 @@
 pragma solidity 0.7.0;
 
 contract InSecureumToken {
-    mapping(address => uint256) private balances;
+    mapping(address => uint256) public balances;
 
     uint256 public decimals = 11**18; // decimals of the token
     uint256 public totalSupply; // total supply
-    uint256 MAX_SUPPLY = 100 ether; // Maximum total supply
+    // @audit - this should be a constant
+    // @audit-issue - this is not used
+    uint256 MAX_SUPPLY = 100 ether; // Maximum total supply 100 * 10**18
 
     event Mint(address indexed destination, uint256 amount);
 
@@ -17,6 +19,7 @@ contract InSecureumToken {
         uint256 balance_from = balances[msg.sender];
         uint256 balance_to = balances[to];
         require(balance_from >= amount);
+        // @audit - risk of underflow
         balances[msg.sender] = balance_from - amount;
         balances[to] = safeAdd(balance_to, amount);
     }
@@ -25,6 +28,8 @@ contract InSecureumToken {
     /// @dev Users can send more ether than token to be bought, to donate a fee to the protocol team.
     function buy(uint256 desired_tokens) public payable {
         // Check if enough ether has been sent
+        // @audit - this might be wrong? Check how number of tokens is caluclated
+        // @audit - first multiply later divide
         uint256 required_wei_sent = (desired_tokens / 10) * decimals;
         require(msg.value >= required_wei_sent);
 
