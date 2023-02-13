@@ -8,7 +8,7 @@ contract Setup is InSecureumToken {
     address bob;
     InSecureumToken token;
 
-    constructor() payable {
+    constructor() {
         InSecureumToken token = new InSecureumToken();
         address alice = msg.sender;
         address bob = address(0x1234);
@@ -16,5 +16,13 @@ contract Setup is InSecureumToken {
 
     function wrapped_safe_add(uint256 a, uint256 b) public returns (uint256) {
         return safeAdd(a, b);
+    }
+
+    function _between(
+        uint256 amount,
+        uint256 low,
+        uint256 high
+    ) internal pure returns (uint256) {
+        return (low + (amount % (high - low + 1)));
     }
 }
