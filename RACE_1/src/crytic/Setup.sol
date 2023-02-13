@@ -3,19 +3,42 @@ pragma solidity 0.7.0;
 
 import {InSecureumToken} from "../InSecureum.sol";
 
-contract Setup is InSecureumToken {
-    address alice;
-    address bob;
+contract User {
+    function proxy(address target, bytes memory data)
+        public
+        returns (bool success, bytes memory returnData)
+    {
+        return target.call(data);
+    }
+}
+
+contract Setup {
+    User alice;
+    User bob;
     InSecureumToken token;
 
     constructor() {
-        InSecureumToken token = new InSecureumToken();
-        address alice = msg.sender;
-        address bob = address(0x1234);
+        token = new InSecureumToken();
+        alice = new User();
+        bob = new User();
     }
 
-    function wrapped_safe_add(uint256 a, uint256 b) public returns (uint256) {
-        return safeAdd(a, b);
+    /// @dev Since safeAdd is internal and we are using External testing setup
+    /// it is neccessary to expose this function for Echidna to test with.
+    function exposed_safeAdd(uint256 a, uint256 b)
+        internal
+        pure
+        returns (uint256)
+    {
+        if (a + b < a) {
+            revert();
+        }
+        return a + b;
+    }
+
+    /// @dev This is a wrapper function (getter) for Echidna to get max supply
+    function max_supply() public pure returns (uint256) {
+        return 100 ether;
     }
 
     function _between(
