@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.7.0;
 
-import {InSecureumToken} from "../InSecureum.sol";
 import {Setup} from "./Setup.sol";
 
 contract EchidnaTest is Setup {
