@@ -17,20 +17,25 @@ contract EchidnaTest is Setup {
     // }
 
     // For each token minted for alice, contract gets 1 ether
-    function test_no_free_mint(uint256 desiredTokens) public {
+    function test_no_free_mint(uint256 desiredTokens, uint256 etherSent)
+        public
+    {
         // pre-conditions
-        uint256 aliceTokenBalanceBefore = balances[alice];
+        desiredTokens = _between(desiredTokens, 10, 100);
+        etherSent = _between(etherSent, 0, 1 ether);
+        uint256 senderTokenBalanceBefore = balances[msg.sender];
         uint256 contractEtherBalanceBefore = address(token).balance;
         emit AssertionFailed(desiredTokens);
-
+        emit AssertionFailed(address(msg.sender).balance);
+        emit AssertionFailed((desiredTokens / 10) * 10**18);
         // action
-        token.buy(desiredTokens);
+        token.buy{value: etherSent}(desiredTokens);
 
         // post-conditions
-        uint256 aliceTokenBalanceAfter = balances[alice];
+        uint256 senderTokenBalanceAfter = balances[msg.sender];
         uint256 contractEtherBalanceAfter = address(token).balance;
         assert(
-            aliceTokenBalanceAfter == aliceTokenBalanceBefore + desiredTokens
+            senderTokenBalanceAfter == senderTokenBalanceBefore + desiredTokens
         );
         assert(contractEtherBalanceAfter > contractEtherBalanceBefore);
     }
