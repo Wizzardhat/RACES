@@ -1,0 +1,5 @@
+[submodule "RACE1_Token/lib/forge-std"]
+	path = RACE1_Token/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/forge-std"]
+	branch = v1.4.0
